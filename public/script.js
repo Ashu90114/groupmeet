@@ -5,6 +5,57 @@ const showChat = document.querySelector("#showChat");
 const backBtn = document.querySelector(".header__back");
 myVideo.muted = true;
 
+
+
+var screenSharing = false;
+var screenStream;
+var peer = null;
+var currentPeer = null;
+
+function startScreenShare() {
+  if (screenSharing) {
+    stopScreenSharing()
+  }
+  navigator.mediaDevices.getDisplayMedia({ video: true }).then((stream) => {
+    screenStream = stream;
+    let videoTrack = screenStream.getVideoTracks()[0];
+    videoTrack.onended = () => {
+      stopScreenSharing()
+    }
+    if (peer) {
+      let sender = currentPeer.peerConnection.getSenders().find(function (s) {
+        return s.track.kind == videoTrack.kind;
+      })
+      sender.replaceTrack(videoTrack)
+      screenSharing = true
+    }
+    console.log(screenStream)
+  })
+}
+
+function stopScreenSharing() {
+  if (!screenSharing) return;
+  let videoTrack = local_stream.getVideoTracks()[0];
+  if (peer) {
+    let sender = currentPeer.peerConnection.getSenders().find(function (s) {
+      return s.track.kind == videoTrack.kind;
+    })
+    sender.replaceTrack(videoTrack)
+  }
+  screenStream.getTracks().forEach(function (track) {
+    track.stop();
+  });
+  screenSharing = false
+}
+
+
+
+
+
+
+
+
+
 backBtn.addEventListener("click", () => {
   document.querySelector(".main__left").style.display = "flex";
   document.querySelector(".main__left").style.flex = "1";
@@ -132,9 +183,8 @@ socket.on("createMessage", (message, userName) => {
   messages.innerHTML =
     messages.innerHTML +
     `<div class="message">
-        <b><i class="far fa-user-circle"></i> <span> ${
-          userName === user ? "me" : userName
-        }</span> </b>
+        <b><i class="far fa-user-circle"></i> <span> ${userName === user ? "me" : userName
+    }</span> </b>
         <span>${message}</span>
     </div>`;
 });
