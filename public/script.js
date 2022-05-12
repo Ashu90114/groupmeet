@@ -13,49 +13,7 @@ var peer = null;
 var currentPeer = null;
 
 
-function setRemoteStream(stream) {
 
-  let video = document.getElementById("remote-video");
-  video.srcObject = stream;
-  video.play();
-}
-
-
-function startScreenShare() {
-  if (screenSharing) {
-    stopScreenSharing()
-  }
-  navigator.mediaDevices.getDisplayMedia({ video: true }).then((stream) => {
-    screenStream = stream;
-    let videoTrack = screenStream.getVideoTracks()[0];
-    videoTrack.onended = () => {
-      stopScreenSharing()
-    }
-    if (peer) {
-      let sender = currentPeer.peerConnection.getSenders().find(function (s) {
-        return s.track.kind == videoTrack.kind;
-      })
-      sender.replaceTrack(videoTrack)
-      screenSharing = true
-    }
-    console.log(screenStream)
-  })
-}
-
-function stopScreenSharing() {
-  if (!screenSharing) return;
-  let videoTrack = local_stream.getVideoTracks()[0];
-  if (peer) {
-    let sender = currentPeer.peerConnection.getSenders().find(function (s) {
-      return s.track.kind == videoTrack.kind;
-    })
-    sender.replaceTrack(videoTrack)
-  }
-  screenStream.getTracks().forEach(function (track) {
-    track.stop();
-  });
-  screenSharing = false
-}
 
 
 
@@ -102,7 +60,9 @@ navigator.mediaDevices
       const video = document.createElement("video");
       call.on("stream", (userVideoStream) => {
         addVideoStream(video, userVideoStream);
+        setRemoteStream(stream);
       });
+      currentPeer = call;
     });
 
     socket.on("user-connected", (userId) => {
@@ -115,7 +75,9 @@ const connectToNewUser = (userId, stream) => {
   const video = document.createElement("video");
   call.on("stream", (userVideoStream) => {
     addVideoStream(video, userVideoStream);
+    setRemoteStream(stream);
   });
+  currentPeer = call;
 };
 
 peer.on("open", (id) => {
@@ -197,3 +159,56 @@ socket.on("createMessage", (message, userName) => {
         <span>${message}</span>
     </div>`;
 });
+
+
+
+
+
+
+
+
+
+
+// function setRemoteStream(stream) {
+
+//   let video = document.getElementById("remote-video");
+//   video.srcObject = stream;
+//   video.play();
+// }
+
+
+function startScreenShare() {
+  if (screenSharing) {
+    stopScreenSharing()
+  }
+  navigator.mediaDevices.getDisplayMedia({ video: true }).then((stream) => {
+    screenStream = stream;
+    let videoTrack = screenStream.getVideoTracks()[0];
+    videoTrack.onended = () => {
+      stopScreenSharing()
+    }
+    if (peer) {
+      let sender = currentPeer.peerConnection.getSenders().find(function (s) {
+        return s.track.kind == videoTrack.kind;
+      })
+      sender.replaceTrack(videoTrack)
+      screenSharing = true
+    }
+    console.log(screenStream)
+  })
+}
+
+function stopScreenSharing() {
+  if (!screenSharing) return;
+  let videoTrack = local_stream.getVideoTracks()[0];
+  if (peer) {
+    let sender = currentPeer.peerConnection.getSenders().find(function (s) {
+      return s.track.kind == videoTrack.kind;
+    })
+    sender.replaceTrack(videoTrack)
+  }
+  screenStream.getTracks().forEach(function (track) {
+    track.stop();
+  });
+  screenSharing = false
+}
