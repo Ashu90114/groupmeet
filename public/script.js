@@ -12,6 +12,15 @@ var screenStream;
 var peer = null;
 var currentPeer = null;
 
+
+function setRemoteStream(stream) {
+
+  let video = document.getElementById("remote-video");
+  video.srcObject = stream;
+  video.play();
+}
+
+
 function startScreenShare() {
   if (screenSharing) {
     stopScreenSharing()
