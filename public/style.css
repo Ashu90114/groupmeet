@@ -33,6 +33,15 @@
 }
 
 
+#goToBack {
+  background-color: #ee2560;
+}
+
+#goToBack :hover {
+  background-color: #f25483;
+  cursor: pointer;
+}
+
 
 
 .header {
@@ -93,6 +102,7 @@ video {
 
 .options__right {
   margin-left: auto;
+  display: flex;
 }
 
 .options__button {

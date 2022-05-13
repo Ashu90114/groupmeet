@@ -22,7 +22,6 @@ var currentPeer = null;
 
 
 
-
 backBtn.addEventListener("click", () => {
   document.querySelector(".main__left").style.display = "flex";
   document.querySelector(".main__left").style.flex = "1";
@@ -163,6 +162,12 @@ socket.on("createMessage", (message, userName) => {
 
 
 
+const goToBack = document.querySelector("#goToBack");
+
+// BackButton
+goToBack.addEventListener("click", () => {
+  window.location.href = '/';
+});
 
 
 
@@ -176,8 +181,10 @@ socket.on("createMessage", (message, userName) => {
 //   video.play();
 // }
 
+const startScreenShare = document.querySelector("#startScreenShare");
 
-function startScreenShare() {
+
+startScreenShare.addEventListener("click", () => {
   if (screenSharing) {
     stopScreenSharing()
   }
@@ -196,11 +203,11 @@ function startScreenShare() {
     }
     console.log(screenStream)
   })
-}
+});
 
 function stopScreenSharing() {
   if (!screenSharing) return;
-  let videoTrack = local_stream.getVideoTracks()[0];
+  let videoTrack = screenStream.getVideoTracks()[0];
   if (peer) {
     let sender = currentPeer.peerConnection.getSenders().find(function (s) {
       return s.track.kind == videoTrack.kind;
