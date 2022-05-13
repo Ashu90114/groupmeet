@@ -15,13 +15,6 @@ var currentPeer = null;
 
 
 
-
-
-
-
-
-
-
 backBtn.addEventListener("click", () => {
   document.querySelector(".main__left").style.display = "flex";
   document.querySelector(".main__left").style.flex = "1";
@@ -170,16 +163,6 @@ goToBack.addEventListener("click", () => {
 });
 
 
-
-
-
-
-// function setRemoteStream(stream) {
-
-//   let video = document.getElementById("remote-video");
-//   video.srcObject = stream;
-//   video.play();
-// }
 
 const startScreenShare = document.querySelector("#startScreenShare");
 
