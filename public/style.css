@@ -221,3 +221,41 @@ video {
     display: flex;
   }
 }
+
+
+
+
+
+
+
+
+
+
+
+.area {
+  margin: 0px;
+  padding: 15px;
+  overflow: hidden;
+  background: #313131;
+}
+
+canvas {
+  box-shadow: -3px 2px 9px 6px black;
+  cursor: pointer;
+}
+
+
+
+.tools .color-field {
+  height: 40px;
+  width: 40px;
+  min-height: 4px;
+  min-width: 40px;
+  cursor: pointer;
+  display: inline-block;
+  cursor: pointer;
+  box-sizing: border-box;
+  border-radius: 50%;
+  border: 2px solid white;
+  align-self: center;
+}
